@@ -1,7 +1,7 @@
 "use client";
 
 
-import { create } from "@/actions/contas";
+import { create } from "@/actions/tarefas";
 import InputText from "@/components/InputText";
 import Botao from "@/components/Botao";
 import NavBar from "@/components/NavBar";
