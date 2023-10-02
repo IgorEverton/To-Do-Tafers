@@ -1,29 +1,83 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { headers } from "../../next.config"
+import { cookies } from 'next/headers'
 
-export async function createImageBitmap(formData){
-  const url="http://localhost:8080/api/tarefas"
+const url = process.env.NEXT_PUBLIC_BASE_URL + "/tarefas"
 
-  const data = {
-    nome:"",
-    categoria: ""
-  }
 
-  const options = {
-    method: "POST",
-    body: JSON.stringify(Object.fromEntries(formData)),
-    headers:{
-      "Content-Type" : "application/json"
+export async function create(formData) {
+    const token = cookies().get("todo_token")
+    const options = {
+        method: "POST",
+        body: JSON.stringify(Object.fromEntries(formData)),
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.value}`
+        }
     }
-  }
+    
+    const resp = await fetch(url, options)
+    if (resp.status !== 201){
+        const json = await resp.json()
+        const erros = json.reduce((str, erro) => str += ". " + erro.message, "")
+        return {message: "Erro ao cadastrar" + erros}
+    }
+    revalidatePath("/tarefas")
+    return {ok: "success"}
+    
+}
 
-  fetch(url, options)
-  if(Response.status !== 201){
-    const json= await Response.json()
-    const erro = json.reduce((str, erro)=>{return str += erro.message}, "")
-    return{mensagem:"Erro ao cadastrar tarefa" + JSON.stringify(json)}
-  }
-  revalidatePath("/tarefas")
+export async function getContas(){
+    const token = cookies().get("todo_token")
+    const options = {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token.value}`
+        }
+    }
+    const resp = await fetch(url, options)
+    if (!resp.ok) throw new Error("Não pode carregar os dados")
+    return resp.json()
+}
+
+export async function destroy(id){  
+    const deleteUrl = url + "/" + id
+
+    const options = {
+        method: "DELETE"
+    }
+
+    const resp = await fetch(deleteUrl, options)
+
+    if (resp.status !== 204) return {error: "Erro ao apagar conta. " + resp.status}
+
+    revalidatePath("/tarefas")
+
+}
+
+export async function update(conta){
+    const updateURL = url + "/" + conta.id
+
+    const options = {
+        method: "PUT",
+        body: JSON.stringify(conta),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+
+    const resp = await fetch(updateURL, options)
+
+    if (resp.status !== 200) return {error: "Erro ao atualizar conta. " + resp.status}
+
+    revalidatePath("/")
+}
+
+export async function getTarefas(id){
+    const getUrl = url + "/" + id
+    const resp = await fetch(getUrl)
+    if (resp.status !== 200) return {error: "Erro ao buscar dados da conta. " + resp.status}
+    const json = await resp.json()
+    return json
 }
