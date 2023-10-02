@@ -7,8 +7,13 @@ import { useState } from "react";
 
 export default function FormTarefa() {
   const [mensagem, setMensagem] = useState("");
+  const [formData, setFormData] = useState({
+    titulo: "",
+    descricao: "",
+    data: "",
+  });
 
-  async function handleSubmit(formData) {
+  async function handleSubmit() {
     try {
       const resp = await create(formData);
       setMensagem(resp.message);
@@ -18,29 +23,48 @@ export default function FormTarefa() {
       redirect("/tarefas");
     } catch (error) {
       console.error("Erro ao criar tarefa:", error);
-      // Lide com o erro, exibindo uma mensagem, por exemplo.
     }
   }
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
+  };
 
   return (
     <>
       <NavBar active="tarefas" />
       <main className="bg-slate-900 mt-20 p-12 rounded-xl max-w-lg m-auto">
-        <h2 className="text-2x1 font-bold">Cadastrar Tarefa</h2>
+        <h2 className="text-2xl font-bold">Cadastrar Tarefa</h2>
         <form
-          action={create}
           onSubmit={(e) => {
-            e.preventDefault(); // Evita o comportamento padrão de recarregar a página
-            handleSubmit(formData);
+            e.preventDefault();
+            handleSubmit();
           }}
         >
-          <InputText id="titulo" label="titulo" />
-          <InputText id="descricao" label="descrição" />
-          <InputText id="data" label="data" type="date" />
+          <InputText
+            id="titulo"
+            label="titulo"
+            value={formData.titulo}
+            onChange={handleChange}
+          />
+          <InputText
+            id="descricao"
+            label="descrição"
+            value={formData.descricao}
+            onChange={handleChange}
+          />
+          <InputText
+            id="data"
+            label="data"
+            type="date"
+            value={formData.data}
+            onChange={handleChange}
+          />
 
           <div>
             <Botao elemento="">Cancelar</Botao>
-            <Botao onClick={handleSubmit}>Salvar</Botao>
+            <Botao type="submit">Salvar</Botao>
           </div>
         </form>
         {mensagem}
