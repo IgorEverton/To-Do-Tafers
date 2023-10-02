@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from 'react';
-import {DocumentCheck} from '@heroicons/react/2/outline';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -25,7 +24,7 @@ export default function DropMenu() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        <DocumentCheck className="h-6 w-6 invisible"/>
+        Exibir
       </Button>
       <Menu
         id="basic-menu"
