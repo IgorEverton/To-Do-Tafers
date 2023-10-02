@@ -10,7 +10,7 @@ async function getTarefas() {
 }
 
 export default async function Tarefas() {
-  const data = await getContas();
+  const data = await getTarefas();
   return (
     <>
       <NavBar active={"tarefas"} />
