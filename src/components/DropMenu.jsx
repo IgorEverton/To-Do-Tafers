@@ -25,7 +25,7 @@ export default function DropMenu() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        <ClipboardDocumentListIcon className="h-6 w-6"/>
+        <ClipboardDocumentListIcon className="h-6 w-6 invisible"/>
       </Button>
       <Menu
         id="basic-menu"
