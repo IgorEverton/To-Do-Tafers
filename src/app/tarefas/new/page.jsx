@@ -2,7 +2,6 @@
 
 import Botao from "@/components/Botao";
 import NavBar from "@/components/NavBar";
-import { CheckIcon, LeftIcon } from "@heroicons/react/2/outline";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 
@@ -29,11 +28,10 @@ export default function FormTarefa() {
           <InputText id="data" label="data" type="date" />
 
           <div>
-            <Botao elemento="" icon={<LeftIcon variant="primary" />}>
+            <Botao elemento="">
               Cancelar
             </Botao>
             <Botao
-              icon={<CheckIcon variant="primary" />}
               onClick={handleSubmit}
             >
               Salvar
