@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from 'react';
-import ClipboardDocumentListIcon from '@heroicons/react/2/outline';
+import {DocumentCheck} from '@heroicons/react/2/outline';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -25,7 +25,7 @@ export default function DropMenu() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        <ClipboardDocumentListIcon className="h-6 w-6 invisible"/>
+        <DocumentCheck className="h-6 w-6 invisible"/>
       </Button>
       <Menu
         id="basic-menu"
