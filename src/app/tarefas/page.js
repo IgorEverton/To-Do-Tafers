@@ -3,7 +3,7 @@ import TarefaData from "./tarefaData";
 import Botao from "@/components/Botao";
 
 async function getTarefas() {
-  const url = "http://localhost:8080/api/tarefas";
+  const url = "http://localhost:8080/api/task";
   const resp = await fetch(url, { next: { revalidate: 0 } });
   if (!resp.ok) throw new Error("Erro Dados não carregado");
   return resp.json();
