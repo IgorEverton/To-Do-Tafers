@@ -17,7 +17,7 @@ export default async function Tarefas() {
       <main className="bg-green-500 m-20 p-12 rounded-x1">
         <div className="flex justify-between items-center">
           <h2>Tarefas</h2>
-          <Botao href="/tarefa/new" icon={<ClipboardDocumentListIcon className="h-6 w-4"/>}>Cadastrar tarefa</Botao>
+          <Botao href="/tarefa/new">Cadastrar tarefa</Botao>
         </div>
         <div id="data" className="text-slate-300 m-1">
           <div
