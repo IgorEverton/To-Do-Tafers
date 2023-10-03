@@ -1,54 +1,44 @@
-import { useState } from "react";
-import { redirect } from "next/navigation";
-import { login } from "@/api/auth"; // Importe a função de autenticação
+"use client"
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [erro, setErro] = useState("");
+import Botao from "@/components/Botao";
+import InputText from "@/components/InputText";
+import Image from "next/image";
+import loginimage from "@/images/login.jpg"
+import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { AuthContext } from "@/contexts/AuthContext";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const resposta = await login({ email, senha });
-      if(email==resposta.email && senha===resposta.senha){
-        redirect("/pages");
-      } else {
-        setErro("Credenciais inválidas. Tente novamente.");
-      }
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      setErro("Erro ao fazer login. Tente novamente mais tarde.");
+export default function LoginPage(){
+    const { register, handleSubmit } = useForm()
+    const { login } = useContext(AuthContext)
+    const { push } = useRouter()
+
+    async function onSubmit(data){
+        const resp = await login(data)
+        if (resp?.error) {
+            toast.error(resp?.error)
+        }else{
+            push("/")
+        }
+
     }
-  };
 
-  return (
-    <div>
-      <h1>Fazer Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">E-mail</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+    return(
+        <div className="flex h-screen">
+            <aside className="hidden lg:flex">
+                <Image src={loginimage} className="h-full w-full object-cover"/>
+            </aside>
+
+            <main className="flex flex-col items-center justify-center w-full">
+                <h1 className="text-5xl font-bold">ToDO</h1>
+                <form onSubmit={handleSubmit(onSubmit)} className=" flex flex-col gap-2 items-start mt-20">
+                    <InputText register={register} name="email" label="email" />
+                    <InputText register={register} name="senha" label="senha" type="password" />
+                    <Button element="button">entrar</Button>
+                </form>
+            </main>
         </div>
-        <div>
-          <label htmlFor="senha">Senha</label>
-          <input
-            type="password"
-            id="senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Entrar</button>
-      </form>
-      {<p>{erro}</p>}
-    </div>
-  );
+    )
 }

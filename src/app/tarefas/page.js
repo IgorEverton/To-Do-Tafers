@@ -3,11 +3,23 @@ import TarefaData from "./tarefaData";
 import Botao from "@/components/Botao";
 
 async function getTarefas() {
-  const url = "http://localhost:8080/api/task";
-  const resp = await fetch(url, { next: { revalidate: 0 } });
-  if (!resp.ok) throw new Error("Erro Dados não carregado");
-  return resp.json();
+  // Use dados falsos durante o processo de compilação
+  if (process.env.NODE_ENV === 'production') {
+    const url = "http://localhost:8080/api/tarefas";
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error("Erro: Dados não carregados");
+    return resp.json();
+  } else {
+    // Use dados falsos para desenvolvimento
+    return [
+      // Objetos de tarefa falsos
+      { id: 1, title: "Tarefa Falsa 1" },
+      { id: 2, title: "Tarefa Falsa 2" },
+      // Adicione mais dados falsos conforme necessário
+    ];
+  }
 }
+
 
 export default async function Tarefas() {
   const data = await getTarefas();
